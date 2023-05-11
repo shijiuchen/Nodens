@@ -1,0 +1,54 @@
+syntax = "proto3";
+option cc_generic_services = true;
+// define the interface of service
+service GrpcService {
+    rpc get_traffic (TrafficRequest) returns (TrafficResponse) {}  // not use
+    rpc adjustRes (ResRequest) returns (ResResponse) {} // adjust resource
+    rpc get_profile (ProfileRequest) returns (ProfileResponse) {}
+    rpc get_net_proc (NetProcRequest) returns (NetProcResponse) {}
+}
+
+message TrafficRequest {
+    string data = 1;   //not use
+
+};
+
+
+message TrafficResponse {
+    string result = 1;
+    double time_stamp=2; // the timestamp of reponse
+};
+
+message ResRequest {
+    //map, format of value is "cpu_usage,replicas_number"
+    repeated string uids = 1;   
+    double value = 2;   
+};
+
+
+message ResResponse {
+    string result = 1;
+};
+
+message ProfileRequest{
+    string data = 1;
+};
+
+message ProfileResponse{
+    string result = 1;
+    double time_stamp=2; // timestamp of reponse
+};
+
+message NetProcRequest {
+    string data = 1;   //not use
+
+};
+
+
+message NetProcResponse {
+    string result = 1;
+    double time_stamp=2; // timestamp of reponse
+};
+
+
+
