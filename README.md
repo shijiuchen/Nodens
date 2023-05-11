@@ -43,7 +43,7 @@ The microservice application often meets with load and call graph dynamics. When
     ```
     We also provide the script to get network traffic of microservices.
     ```
-    cd NetTrafficMonitor/
+    cd LoadMonitor/
     python3 NetworkTrafficMonitor_temp.py
     ```
     Then, use above data to fit linear regression prediction models for different microservices.

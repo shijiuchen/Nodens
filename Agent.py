@@ -5,11 +5,11 @@ import numpy as np
 import time
 import sys
 from MSDAG import *
-from NetTrafficMonitor.NetTrafficMonitor import initialize,runOneTime
+from LoadMonitor.NetTrafficMonitor import initialize,runOneTime
 from LoadUpdator.Update import Update_Traffic_Tree,Update_Traffic_Graph
 from Predict.Predictor import predict_net_to_load, predict_load_to_CPU
-from QueueCompensator.AdjustRes import run_set_cpu
-from QueueCompensator.Compensator import Compensate
+from QueryDrainer.AdjustRes import run_set_cpu
+from QueryDrainer.Compensator import Compensate
 from testRes import set_QoS_violations, set_enough
 from multiprocessing import Process
 
