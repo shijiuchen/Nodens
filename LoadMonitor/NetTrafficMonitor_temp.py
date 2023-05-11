@@ -14,7 +14,6 @@ NodeIpMapper={
     "cpu-08":"10.2.64.8:50052",
 }
 
-#构建微服务应用的DAG结构
 class Node:
     def __init__(self,name,in_traffic,out_traffic,upper_traffic,back_traffic,children):
         self.name=name
