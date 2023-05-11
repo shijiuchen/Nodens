@@ -29,7 +29,7 @@ def get_latency(startTs,endTs,period):
                     flag=0
             if(flag==0):
                 errorCount+=1
-                break#跳出循环
+                break
             spanCount+=1
             if(spanCount==1):
                 minTs=float(a['startTime'])
