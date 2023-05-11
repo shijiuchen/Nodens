@@ -18,7 +18,7 @@ The structure of this benchmark is shown as follows.
 kubectl apply -f /k8s-yaml
 ```
 
-# Basic sample
+# A basic sample
 
 Here is a basic shell sample, covering all dynamic graphs.
 
