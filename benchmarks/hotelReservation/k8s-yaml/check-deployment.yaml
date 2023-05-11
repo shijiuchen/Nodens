@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: check
+  name: check
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: check
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+        sidecar.istio.io/statsInclusionPrefixes: cluster.outbound,cluster_manager,listener_manager,http_mixer_filter,tcp_mixer_filter,server,cluster.xds-grp,listener,connection_manager
+        sidecar.istio.io/statsInclusionRegexps: http.*
+      creationTimestamp: null
+      labels:
+        io.kompose.service: check
+    spec:
+      nodeName: cpu-04
+      containers:
+        - command:
+            - check
+          image: shijiuchen/hotel_reserv_single_node:latest
+          imagePullPolicy: IfNotPresent
+          name: hotel-reserv-check
+          ports:
+            - containerPort: 8092
+          #resources:
+          #  requests:
+          #    cpu: "6000m"
+          #  limits:
+          #    cpu: "6000m"
+      restartPolicy: Always
+status: {}

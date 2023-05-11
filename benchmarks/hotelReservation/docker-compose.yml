@@ -1,0 +1,235 @@
+version: "2"
+services:
+  consul:
+    image: consul:latest
+    ports:
+      - "8300:8300"
+      - "8400:8400"
+      - "8500:8500"
+      - "8600:53/udp"
+    restart: always
+
+  frontend:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_frontend_single_node
+    entrypoint: frontend
+    container_name: 'hotel_reserv_frontend'
+    ports:
+      - "5000:5000"
+    depends_on:
+      - consul
+    restart: always
+    cpuset: "0"
+
+  profile:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_profile_single_node
+    entrypoint: profile
+    container_name: 'hotel_reserv_profile'
+    depends_on:
+      - mongodb-profile
+      - memcached-profile
+      - consul
+    restart: always
+    cpuset: "1"
+
+  search:
+    build: .
+    image: hotel_reserv_search_single_node
+    entrypoint: search
+    container_name: 'hotel_reserv_search'
+    depends_on:
+      - consul
+    restart: always
+    cpuset: "2"
+    environment:
+      - TLS
+      # - GRPC_GO_LOG_VERBOSITY_LEVEL=2
+      # - GRPC_GO_LOG_SEVERITY_LEVEL=info
+
+  geo:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_geo_single_node
+    entrypoint: geo
+    container_name: 'hotel_reserv_geo'
+    depends_on:
+      - mongodb-geo
+      - consul
+    restart: always
+    cpuset: "3"
+
+  rate:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_rate_single_node
+    entrypoint: rate
+    container_name: 'hotel_reserv_rate'
+    depends_on:
+      - mongodb-rate
+      - memcached-rate
+      - consul
+    restart: always
+    cpuset: "4"
+
+  recommendation:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_recommend_single_node
+    entrypoint: recommendation
+    container_name: 'hotel_reserv_recommendation'
+    depends_on:
+      - mongodb-recommendation
+      - consul
+    restart: always
+    cpuset: "5"
+
+  user:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_user_single_node
+    entrypoint: user
+    container_name: 'hotel_reserv_user'
+    depends_on:
+      - mongodb-user
+      - consul
+    restart: always
+    cpuset: "6"
+
+  reservation:
+    environment:
+      - TLS
+    build: .
+    image: hotel_reserv_rsv_single_node
+    entrypoint: reservation
+    container_name: 'hotel_reserv_reservation'
+    depends_on:
+      - mongodb-reservation
+      - memcached-reserve
+      - consul
+    restart: always
+    cpuset: "7"
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: 'hotel_reserv_jaeger'
+    ports:
+      - "14269"
+      - "5778:5778"
+      - "14268:14268"
+      - "14267"
+      - "16686:16686"
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+    restart: always
+    cpuset: "17"
+
+  memcached-rate:
+    image: memcached
+    # hostname: user-memcached
+    container_name: 'hotel_reserv_rate_mmc'
+    restart: always
+    environment:
+      - MEMCACHED_CACHE_SIZE=128
+      - MEMCACHED_THREADS=2
+    logging:
+      options:
+        max-size: 50m
+    cpuset: "8"
+
+  memcached-profile:
+    image: memcached
+    # hostname: user-memcached
+    container_name: 'hotel_reserv_profile_mmc'
+    restart: always
+    environment:
+      - MEMCACHED_CACHE_SIZE=128
+      - MEMCACHED_THREADS=2
+    logging:
+      options:
+        max-size: 50m
+    cpuset: "9"
+
+  memcached-reserve:
+    image: memcached
+    # hostname: user-memcached
+    container_name: 'hotel_reserv_reservation_mmc'
+    restart: always
+    environment:
+      - MEMCACHED_CACHE_SIZE=128
+      - MEMCACHED_THREADS=2
+    logging:
+      options:
+        max-size: 50m
+    cpuset: "10"
+
+  mongodb-geo:
+    image: mongo
+    container_name: 'hotel_reserv_geo_mongo'
+    # hostname: geo-db
+    restart: always
+    cpuset: "11"
+    volumes:
+      - geo:/data/db  
+
+  mongodb-profile:
+    image: mongo
+    container_name: 'hotel_reserv_profile_mongo'
+    hostname: profile-db
+    restart: always
+    cpuset: "12"
+    volumes:
+      - profile:/data/db    
+
+  mongodb-rate:
+    image: mongo
+    container_name: 'hotel_reserv_rate_mongo'
+    hostname: rate-db
+    restart: always
+    cpuset: "13"
+    volumes:
+      - rate:/data/db   
+
+  mongodb-recommendation:
+    image: mongo
+    hostname: recommendation-db
+    container_name: 'hotel_reserv_recommendation_mongo'
+    restart: always
+    cpuset: "14"
+    volumes:
+      - recommendation:/data/db
+    
+  mongodb-reservation:
+    image: mongo
+    container_name: 'hotel_reserv_reservation_mongo'
+    hostname: reservation-db
+    restart: always
+    cpuset: "15"
+    volumes:
+      - reservation:/data/db 
+
+  mongodb-user:
+    image: mongo
+    container_name: 'hotel_reserv_user_mongo'
+    hostname: user-db
+    restart: always
+    cpuset: "16"
+    volumes:
+      - user:/data/db
+    
+volumes:
+  geo:
+  profile:
+  rate:
+  recommendation:
+  reservation:
+  user:

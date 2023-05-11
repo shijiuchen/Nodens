@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: frontend-search
+  name: frontend-search
+spec:
+  ports:
+    - name: "8093"
+      port: 8093
+      targetPort: 8093
+  selector:
+    io.kompose.service: frontend-search
+status:
+  loadBalancer: {}

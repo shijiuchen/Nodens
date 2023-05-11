@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: entering-ms
+  name: entering-ms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: entering-ms
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.22.0 (955b78124)
+        sidecar.istio.io/statsInclusionPrefixes: cluster.outbound,cluster_manager,listener_manager,http_mixer_filter,tcp_mixer_filter,server,cluster.xds-grp,listener,connection_manager
+        sidecar.istio.io/statsInclusionRegexps: http.*
+      creationTimestamp: null
+      labels:
+        io.kompose.service: entering-ms
+    spec:
+      nodeName: cpu-03
+      containers:
+        - command:
+            - enteringMS
+          image: shijiuchen/hotel_reserv_single_node:latest
+          imagePullPolicy: IfNotPresent
+          name: hotel-reserv-entering-ms
+          ports:
+            - containerPort: 5000
+          #resources:
+          #  requests:
+          #    cpu: "4420m"
+          #  limits:
+          #    cpu: "4420m"
+      restartPolicy: Always
+status: {}
