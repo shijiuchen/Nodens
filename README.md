@@ -48,7 +48,7 @@ The microservice application often meets with load and call graph dynamics. When
     ```
     Then, use above data to fit linear regression prediction models for different microservices.
 
-5. Replace the slope and intercept values into `./ResPredictor/Predictor.py` for microservices with above results.
+5. Replace the slope and intercept values into `./Predict/Predictor.py` for microservices with above results.
 
 6. For testing each dynamic scenario, first replace values in `testRes.py` to set the just-enough/over-provisioned resources for the initial state.
 
