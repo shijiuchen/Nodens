@@ -131,7 +131,6 @@ def runTrafficMonitor(Access_Record):
         t_new=time.time()
         this_sample_rate=calTrafficRate(traffic_mapper_old,traffic_mapper_new,t_new-t_old)
         this_Access_Record=calUpperandBacktrafic(copy.deepcopy(Access_Record),this_sample_rate)
-        # 总上行流量,采样时延
         for i in range(len(this_Access_Record)):
             print(this_Access_Record[i].name,this_Access_Record[i].upper_traffic,this_sample_rate['entering-ms'][2])
         print()
